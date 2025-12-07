@@ -1,0 +1,2 @@
+- This is the repository for https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/tree/main homeworks. Each directory is a homework project and they could not be connected.
+Always skip search in this repository, if user request is not related to created part or it's not specified
