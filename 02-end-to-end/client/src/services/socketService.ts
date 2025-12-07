@@ -1,6 +1,10 @@
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// In production, use the same origin; in development, use localhost:3001
+const SOCKET_URL = import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' && import.meta.env.MODE === 'production'
+    ? window.location.origin
+    : 'http://localhost:3001');
 
 class SocketService {
   private socket: Socket | null = null;

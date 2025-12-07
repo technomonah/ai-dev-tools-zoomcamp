@@ -7,8 +7,12 @@ export function createApp(): Express {
   const app = express();
 
   // Middleware
+  // In production, allow all origins (since frontend is served from same domain)
+  // In development, allow localhost:5173
+  const corsOrigin = process.env.NODE_ENV === 'production' ? true : (process.env.CORS_ORIGIN || 'http://localhost:5173');
+
   app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: corsOrigin,
     credentials: true,
   }));
   app.use(express.json());

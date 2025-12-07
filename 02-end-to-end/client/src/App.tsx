@@ -8,7 +8,7 @@ import { useCollaboration } from './hooks/useCollaboration';
 import { useCodeExecution } from './hooks/useCodeExecution';
 import type { Language } from './types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? window.location.origin : 'http://localhost:3001');
 
 function App() {
   const [sessionId, setSessionId] = useState<string>('');

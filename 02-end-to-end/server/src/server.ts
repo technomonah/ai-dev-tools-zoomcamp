@@ -10,9 +10,13 @@ const app = createApp();
 const httpServer = createServer(app);
 
 // Setup Socket.io
+// In production, allow all origins (frontend served from same domain)
+// In development, allow localhost:5173
+const corsOrigin = process.env.NODE_ENV === 'production' ? true : (process.env.CORS_ORIGIN || 'http://localhost:5173');
+
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: corsOrigin,
     credentials: true,
   },
 });
