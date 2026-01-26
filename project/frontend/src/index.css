@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-background: #faf9f5;
+  --color-surface: #ffffff;
+  --color-primary: #15803d;
+  --color-primary-light: #22c55e;
+  --color-primary-dark: #166534;
+  --color-gold: #ca8a04;
+  --color-gold-light: #eab308;
+  --color-gold-dark: #a16207;
+  --color-income: #15803d;
+  --color-expense: #dc2626;
+  --color-savings: #2563eb;
+  --color-daily: #ca8a04;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #6b6b6b;
+}
+
+body {
+  @apply bg-background text-text font-sans antialiased;
+}
+
+/* Card Component */
+@layer components {
+  .card {
+    @apply bg-surface rounded-card shadow-card transition-shadow duration-200;
+  }
+
+  .card:hover {
+    @apply shadow-card-hover;
+  }
+
+  /* Button Components */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-button font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-dark focus:ring-primary;
+  }
+
+  .btn-gold {
+    @apply btn bg-gold text-white hover:bg-gold-dark focus:ring-gold;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-text-secondary hover:bg-gray-100 focus:ring-gray-300;
+  }
+
+  .btn-icon {
+    @apply p-2 rounded-button text-text-secondary hover:bg-gray-100 hover:text-text transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300;
+  }
+
+  /* Input Component */
+  .input {
+    @apply w-full px-3 py-2 bg-white border border-gray-200 rounded-button text-text placeholder:text-text-secondary/50 transition-all duration-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10;
+  }
+
+  /* Section Title */
+  .section-title {
+    @apply text-lg font-semibold text-text flex items-center gap-2;
+  }
+
+  /* Data Labels and Values */
+  .data-label {
+    @apply text-sm text-text-secondary;
+  }
+
+  .data-value {
+    @apply text-base font-medium text-text;
+  }
+
+  /* Tab Pills */
+  .tab-pills {
+    @apply flex gap-1 p-1 bg-gray-100 rounded-card;
+  }
+
+  .tab-pill {
+    @apply px-4 py-2 rounded-button font-medium transition-all duration-200 text-text-secondary;
+  }
+
+  .tab-pill-active {
+    @apply tab-pill bg-white text-primary shadow-sm;
+  }
+
+  /* Category Tag */
+  .category-tag {
+    @apply text-xs px-2 py-0.5 rounded-full font-medium;
+  }
+
+  /* Range Slider */
+  .range-slider {
+    @apply w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer;
+  }
+
+  .range-slider::-webkit-slider-thumb {
+    @apply appearance-none w-5 h-5 bg-savings rounded-full shadow-md cursor-pointer transition-transform duration-200 hover:scale-110;
+  }
+
+  .range-slider::-moz-range-thumb {
+    @apply w-5 h-5 bg-savings rounded-full shadow-md cursor-pointer border-none transition-transform duration-200 hover:scale-110;
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  .text-income {
+    color: var(--color-income);
+  }
+
+  .text-expense {
+    color: var(--color-expense);
+  }
+
+  .text-savings {
+    color: var(--color-savings);
+  }
+
+  .text-daily {
+    color: var(--color-daily);
+  }
+
+  .bg-income {
+    background-color: var(--color-income);
+  }
+
+  .bg-expense {
+    background-color: var(--color-expense);
+  }
+
+  .bg-savings {
+    background-color: var(--color-savings);
+  }
+
+  .bg-daily {
+    background-color: var(--color-daily);
+  }
+}

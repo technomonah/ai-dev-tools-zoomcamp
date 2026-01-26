@@ -1,0 +1,958 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Leprecoin API",
+    "description": "API for personal finance management application",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "docs": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "service": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register",
+        "operationId": "register_api_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserRegister" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "400": { "description": "Email already registered" },
+          "422": { "description": "Validation Error" }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login",
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserLogin" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials" },
+          "422": { "description": "Validation Error" }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Logout",
+        "operationId": "logout_api_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Get Me",
+        "operationId": "get_me_api_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserResponse" }
+              }
+            }
+          },
+          "401": { "description": "Not authenticated" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Months",
+        "operationId": "get_months_api_months_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/MonthSummary" }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["months"],
+        "summary": "Create Month",
+        "operationId": "create_month_api_months_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MonthCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MonthSummary" }
+              }
+            }
+          },
+          "422": { "description": "Validation Error" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months/{month_id}": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Month",
+        "operationId": "get_month_api_months__month_id__get",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Month" }
+              }
+            }
+          },
+          "404": { "description": "Month not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "put": {
+        "tags": ["months"],
+        "summary": "Update Month",
+        "operationId": "update_month_api_months__month_id__put",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MonthUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MonthSummary" }
+              }
+            }
+          },
+          "404": { "description": "Month not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months/{month_id}/incomes": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Incomes",
+        "operationId": "get_incomes_api_months__month_id__incomes_get",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Income" }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["months"],
+        "summary": "Create Income",
+        "operationId": "create_income_api_months__month_id__incomes_post",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/IncomeCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Income" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months/{month_id}/fixed-expenses": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Fixed Expenses",
+        "operationId": "get_fixed_expenses_api_months__month_id__fixed_expenses_get",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/FixedExpense" }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["months"],
+        "summary": "Create Fixed Expense",
+        "operationId": "create_fixed_expense_api_months__month_id__fixed_expenses_post",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FixedExpenseCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FixedExpense" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months/{month_id}/daily-expenses": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Daily Expenses",
+        "operationId": "get_daily_expenses_api_months__month_id__daily_expenses_get",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/DailyExpense" }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["months"],
+        "summary": "Create Daily Expense",
+        "operationId": "create_daily_expense_api_months__month_id__daily_expenses_post",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DailyExpenseCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DailyExpense" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months/{month_id}/balance": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Balance",
+        "operationId": "get_balance_api_months__month_id__balance_get",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BalanceResponse" }
+              }
+            }
+          },
+          "404": { "description": "Month not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/months/{month_id}/analytics": {
+      "get": {
+        "tags": ["months"],
+        "summary": "Get Analytics",
+        "operationId": "get_analytics_api_months__month_id__analytics_get",
+        "parameters": [
+          {
+            "name": "month_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AnalyticsResponse" }
+              }
+            }
+          },
+          "404": { "description": "Month not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/incomes/{income_id}": {
+      "put": {
+        "tags": ["expenses"],
+        "summary": "Update Income",
+        "operationId": "update_income_api_incomes__income_id__put",
+        "parameters": [
+          {
+            "name": "income_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/IncomeUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Income" }
+              }
+            }
+          },
+          "404": { "description": "Income not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "delete": {
+        "tags": ["expenses"],
+        "summary": "Delete Income",
+        "operationId": "delete_income_api_incomes__income_id__delete",
+        "parameters": [
+          {
+            "name": "income_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Income not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/fixed-expenses/{expense_id}": {
+      "put": {
+        "tags": ["expenses"],
+        "summary": "Update Fixed Expense",
+        "operationId": "update_fixed_expense_api_fixed_expenses__expense_id__put",
+        "parameters": [
+          {
+            "name": "expense_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FixedExpenseUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FixedExpense" }
+              }
+            }
+          },
+          "404": { "description": "Fixed expense not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "delete": {
+        "tags": ["expenses"],
+        "summary": "Delete Fixed Expense",
+        "operationId": "delete_fixed_expense_api_fixed_expenses__expense_id__delete",
+        "parameters": [
+          {
+            "name": "expense_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Fixed expense not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/daily-expenses/{expense_id}": {
+      "put": {
+        "tags": ["expenses"],
+        "summary": "Update Daily Expense",
+        "operationId": "update_daily_expense_api_daily_expenses__expense_id__put",
+        "parameters": [
+          {
+            "name": "expense_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DailyExpenseUpdate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DailyExpense" }
+              }
+            }
+          },
+          "404": { "description": "Daily expense not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "delete": {
+        "tags": ["expenses"],
+        "summary": "Delete Daily Expense",
+        "operationId": "delete_daily_expense_api_daily_expenses__expense_id__delete",
+        "parameters": [
+          {
+            "name": "expense_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Daily expense not found" }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": ["categories"],
+        "summary": "Get Categories",
+        "operationId": "get_categories_api_categories_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Category" }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/detect-category": {
+      "post": {
+        "tags": ["categories"],
+        "summary": "Detect Category",
+        "operationId": "detect_category_api_detect_category_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DetectCategoryRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DetectCategoryResponse" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserRegister": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email" },
+          "password": { "type": "string" }
+        }
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "email": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "MonthCreate": {
+        "type": "object",
+        "required": ["year", "month"],
+        "properties": {
+          "year": { "type": "integer" },
+          "month": { "type": "integer", "minimum": 1, "maximum": 12 },
+          "savings_percent": { "type": "number", "default": 0 }
+        }
+      },
+      "MonthUpdate": {
+        "type": "object",
+        "properties": {
+          "savings_percent": { "type": "number" }
+        }
+      },
+      "MonthSummary": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "year": { "type": "integer" },
+          "month": { "type": "integer" },
+          "savings_percent": { "type": "number" }
+        }
+      },
+      "Month": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "year": { "type": "integer" },
+          "month": { "type": "integer" },
+          "savings_percent": { "type": "number" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "incomes": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Income" }
+          },
+          "fixed_expenses": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/FixedExpense" }
+          },
+          "daily_expenses": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DailyExpense" }
+          }
+        }
+      },
+      "IncomeCreate": {
+        "type": "object",
+        "required": ["name", "amount"],
+        "properties": {
+          "name": { "type": "string" },
+          "amount": { "type": "number" }
+        }
+      },
+      "IncomeUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "amount": { "type": "number" }
+        }
+      },
+      "Income": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "month_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "amount": { "type": "number" }
+        }
+      },
+      "FixedExpenseCreate": {
+        "type": "object",
+        "required": ["name", "amount"],
+        "properties": {
+          "name": { "type": "string" },
+          "amount": { "type": "number" }
+        }
+      },
+      "FixedExpenseUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "amount": { "type": "number" }
+        }
+      },
+      "FixedExpense": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "month_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "amount": { "type": "number" }
+        }
+      },
+      "DailyExpenseCreate": {
+        "type": "object",
+        "required": ["date", "description", "amount"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "description": { "type": "string" },
+          "amount": { "type": "number" },
+          "category": { "type": "string", "default": "Прочее" }
+        }
+      },
+      "DailyExpenseUpdate": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "description": { "type": "string" },
+          "amount": { "type": "number" },
+          "category": { "type": "string" }
+        }
+      },
+      "DailyExpense": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "month_id": { "type": "integer" },
+          "date": { "type": "string", "format": "date" },
+          "description": { "type": "string" },
+          "amount": { "type": "number" },
+          "category": { "type": "string" }
+        }
+      },
+      "BalanceResponse": {
+        "type": "object",
+        "properties": {
+          "total_income": { "type": "number" },
+          "total_fixed_expenses": { "type": "number" },
+          "savings_amount": { "type": "number" },
+          "available_budget": { "type": "number" },
+          "days_in_month": { "type": "integer" },
+          "daily_budget": { "type": "number" },
+          "current_day": { "type": "integer" },
+          "expected_spent": { "type": "number" },
+          "actual_spent": { "type": "number" },
+          "balance": { "type": "number" },
+          "daily_balances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": { "type": "integer" },
+                "budget": { "type": "number" },
+                "spent": { "type": "number" },
+                "balance": { "type": "number" }
+              }
+            }
+          }
+        }
+      },
+      "AnalyticsResponse": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "amount": { "type": "number" },
+                "percent": { "type": "number" }
+              }
+            }
+          },
+          "total": { "type": "number" }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "keywords": { "type": "string" }
+        }
+      },
+      "DetectCategoryRequest": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": { "type": "string" }
+        }
+      },
+      "DetectCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
